@@ -1,3 +1,4 @@
+import 'package:animation_test/hero_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -6,7 +7,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,8 +29,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
 
-  double _height = 20;
-  double _opacity = 1;
+
+  //=====アニメーションアイコン=====================================
 
   AnimationController _animationController;
   bool isPlaying = false;
@@ -56,6 +57,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     });
   }
 
+  //===================================================
+
+  double _height = 20;
+
   void _onTap() {
     if(_height == 200){
       setState(() {
@@ -67,6 +72,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       });
     }
   }
+
+  double _opacity = 1;
 
   void _onTap2() {
     if(_opacity == 1){
@@ -87,12 +94,16 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         child: SafeArea(
           child: Column(
             children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: animateIcons()
+              ),
               AnimatedContainer(
                 height: _height,
                 width: MediaQuery.of(context).size.width,
                 color: Colors.blue,
-                duration: Duration(milliseconds: 500),
-                curve: Curves.ease,
+                duration: Duration(milliseconds: 400),
+                curve: Curves.fastOutSlowIn,
                 child: Stack(
                   overflow: Overflow.clip,
                   children: [
@@ -124,24 +135,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   height: 200,
                   width: MediaQuery.of(context).size.width,
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  IconButton(
-                    iconSize: 50,
-                    icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
-                    onPressed: () => _handleOnPressed(),
-                  ),
-                  IconButton(
-                    iconSize: 50,
-                    icon: AnimatedIcon(
-                      icon: AnimatedIcons.play_pause,
-                      progress: _animationController,
-                    ),
-                    onPressed: () => _handleOnPressed(),
-                  ),
-                ],
               ),
               Slidable(
                 actionPane: SlidableDrawerActionPane(),
@@ -178,6 +171,44 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                     onTap: () => print('Delete'),
                   ),
                 ],
+              ),
+              SizedBox(height: 20,),
+              Text('Click me ↓'),
+              SizedBox(height: 10,),
+              GestureDetector(
+                child: Hero(
+                  tag: 'image',
+                  child: Stack(
+                    overflow: Overflow.clip,
+                    children: [
+                      Positioned(
+                        child: Column(
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(20)),
+                                image: DecorationImage(
+                                  image: AssetImage('images/architecture.jpg'),
+                                  fit: BoxFit.cover
+                                )
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                          transitionDuration: Duration(milliseconds: 500),
+                          pageBuilder: (_, __, ___) => HeroPage()),
+                  );
+                },
               )
             ],
           ),
@@ -187,16 +218,114 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         mainAxisSize: MainAxisSize.min,
         children: [
           FloatingActionButton(
+            heroTag: 'a',
             child: Text('折メ'),
             onPressed: _onTap
           ),
           SizedBox(height: 10,),
           FloatingActionButton(
+            heroTag: 'b',
             child: Text('薄'),
             onPressed: _onTap2
           ),
         ],
       ),
+    );
+  }
+
+  Widget animateIcons(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        IconButton(
+          iconSize: 50,
+          icon: Icon(isPlaying ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+          onPressed: () {
+            _onTap();
+            _handleOnPressed();
+          },
+        ),
+        IconButton(
+          iconSize: 50,
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.play_pause,
+            progress: _animationController,
+          ),
+          onPressed: () => _handleOnPressed(),
+        ),
+        IconButton(
+          iconSize: 50,
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.add_event,
+            progress: _animationController,
+          ),
+          onPressed: () => _handleOnPressed(),
+        ),
+        IconButton(
+          iconSize: 50,
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.arrow_menu,
+            progress: _animationController,
+          ),
+          onPressed: () => _handleOnPressed(),
+        ),
+        IconButton(
+          iconSize: 50,
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.close_menu,
+            progress: _animationController,
+          ),
+          onPressed: () => _handleOnPressed(),
+        ),
+        IconButton(
+          iconSize: 50,
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.event_add,
+            progress: _animationController,
+          ),
+          onPressed: () => _handleOnPressed(),
+        ),
+        IconButton(
+          iconSize: 50,
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.home_menu,
+            progress: _animationController,
+          ),
+          onPressed: () => _handleOnPressed(),
+        ),
+        IconButton(
+          iconSize: 50,
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.list_view,
+            progress: _animationController,
+          ),
+          onPressed: () => _handleOnPressed(),
+        ),
+        IconButton(
+          iconSize: 50,
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.menu_arrow,
+            progress: _animationController,
+          ),
+          onPressed: () => _handleOnPressed(),
+        ),
+        IconButton(
+          iconSize: 50,
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.view_list,
+            progress: _animationController,
+          ),
+          onPressed: () => _handleOnPressed(),
+        ),
+        IconButton(
+          iconSize: 50,
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.search_ellipsis,
+            progress: _animationController,
+          ),
+          onPressed: () => _handleOnPressed(),
+        ),
+      ],
     );
   }
 }
